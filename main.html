@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Roshni!</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Great Vibes for heading, Montserrat for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the page and confetti */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Hide scrollbars */
+        }
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 16px; /* rectangular shape for a streamer effect */
+            background-color: #fff;
+            opacity: 0.7;
+            animation: fall 6s linear infinite;
+        }
+        .confetti.gold { background-color: #FFD700; }
+        .confetti.pink { background-color: #FFC0CB; }
+        .confetti.silver { background-color: #C0C0C0; }
+
+        /* Animation for the falling confetti */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotateZ(0deg) rotateY(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotateZ(720deg) rotateY(360deg); opacity: 0; }
+        }
+        
+        /* Animation for the main content card */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        #main-content { animation: fadeIn 1s ease-out forwards; }
+
+        /* Styles for the modals */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .modal-visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+        /* Styles for the elegant black cat */        
+        #elegant-cat {
+            position: fixed;
+            width: 150px;
+            height: 250px;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            opacity: 0; /* Start hidden */
+        }
+        .cat-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .cat-body-shape {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 60px;
+            background-color: #1a1a1a;
+            border-radius: 10px 10px 0 0;
+        }
+        .cat-head-shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 60px;
+            background: #1a1a1a;
+            border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
+        }
+        .cat-head-shape::before, .cat-head-shape::after { /* Ears */
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #1a1a1a;
+            top: -15px;
+        }
+        .cat-head-shape::before { left: 0; transform: rotate(-20deg); }
+        .cat-head-shape::after { right: 0; transform: rotate(20deg); }
+
+        .cat-eye-container {
+            position: absolute;
+            width: 100%;
+            top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .cat-eye-shape {
+            width: 20px;
+            height: 12px;
+            background-color: #f0e68c; /* Khaki yellow */
+            border-radius: 50%;
+            transform: rotate(-10deg);
+        }
+        .cat-eye-shape.right {
+            transform: rotate(10deg);
+        }
+
+        .cat-tail-shape {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-10%);
+            width: 120px;
+            height: 120px;
+            animation: tail-sway 3s ease-in-out infinite;
+        }
+        
+        @keyframes tail-sway {
+            0%, 100% { transform: translateX(-10%) rotate(-5deg); }
+            50% { transform: translateX(-10%) rotate(5deg); }
+        }
+
+    </style>
+</head>
+<body class="bg-gradient-to-br from-rose-100 via-pink-200 to-purple-200 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main Content Container -->
+    <div id="main-content" class="text-center bg-white/30 backdrop-blur-xl p-8 md:p-12 rounded-2xl shadow-2xl max-w-lg w-full">
+        <h1 class="font-cursive text-6xl md:text-8xl text-gray-800 drop-shadow-sm mb-4">
+            Happy Birthday, Roshni!
+        </h1>
+        <div id="wish-prompt">
+            <p class="text-lg md:text-xl text-gray-700/90 mb-8 font-light">
+                May your special day be as bright and beautiful as you are. Wishing you a year ahead filled with joy, success, and unforgettable moments.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button id="show-poem-btn" class="bg-indigo-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-600 transform hover:scale-105 transition-transform duration-300 ease-in-out w-full sm:w-auto">
+                    ✨ Poem for U ✨
+                </button>
+                
+                <button id="show-wish-modal-btn" class="bg-white text-gray-700 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transform hover:scale-105 transition-transform duration-300 ease-in-out w-full sm:w-auto">
+                    Make a Wish
+                </button>
+                
+                <button id="show-special-note-btn" class="bg-pink-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-pink-600 transform hover:scale-105 transition-transform duration-300 ease-in-out w-full sm:w-auto">
+                    Special Note
+                </button>
+            </div>
+        </div>
+        <div id="wish-confirmation" class="hidden">
+             <p class="text-xl md:text-2xl text-indigo-800 font-semibold mb-4">
+                Your beautiful wish has been sent to the stars!
+            </p>
+            <p class="text-lg text-gray-700">
+                May it travel across the universe and come back to you as a wonderful reality. Have the happiest of birthdays!
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Elegant Cat Character -->
+    <div id="elegant-cat">
+        <div class="cat-container">
+            <div class="cat-tail-shape">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round">
+                    <path d="M 10 90 Q 50 90 50 50 Q 50 10 90 10" />
+                </svg>
+            </div>
+            <div class="cat-body-shape"></div>
+            <div class="cat-head-shape">
+                <div class="cat-eye-container">
+                    <div class="cat-eye-shape left"></div>
+                    <div class="cat-eye-shape right"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="absolute top-0 left-0 w-full h-full pointer-events-none"></div>
+
+    <!-- Make a Wish Modal -->
+    <div id="wish-modal" class="modal modal-hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative">
+            <button id="close-wish-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Make Your Birthday Wish</h2>
+            <p class="text-gray-600 mb-4">Close your eyes, think of something wonderful, and write it down here.</p>
+            <textarea id="wish-input" placeholder="I wish for..." class="w-full p-3 border border-gray-300 rounded-lg mb-4 h-28 resize-none focus:ring-2 focus:ring-pink-400 focus:outline-none"></textarea>
+            <button id="submit-wish-btn" class="w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300">Send My Wish</button>
+        </div>
+    </div>
+
+    <!-- Poem Display Modal -->
+    <div id="poem-display-modal" class="modal modal-hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative text-center">
+            <button id="close-poem-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">A Little Poem for You</h2>
+            <div class="text-gray-700 text-lg">
+                <p class="mb-4">A special wish for you, Roshni, so bright,</p>
+                <p class="mb-4">May your world be filled with pure delight.</p>
+                <p class="mb-4">With laughter that sparkles and dreams that take flight,</p>
+                <p>Happy Birthday, you're a beautiful light!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Note Modal -->
+    <div id="special-note-modal" class="modal modal-hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative text-center">
+            <button id="close-special-note-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">A Special Note for You</h2>
+            <div class="text-gray-700 text-lg">
+                <p class="mb-4">Dear Roshni,</p>
+                <p class="mb-4">Tumhare saath jo bhi waqt guzra hai, wo mere liye bahut special raha hai</p>
+                <p class="mb-4">Kab samay guzarta gaya, mujhe khud bhi pata nahi chala…</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+         // --- Elegant Cat Logic ---
+        const cat = document.getElementById('elegant-cat');
+        let catTimeout;
+        let isCatVisible = false;
+
+        const cornerPositions = [
+            { bottom: '0px', right: '20px', transform: 'scaleX(1)' },
+            { bottom: '0px', left: '20px', transform: 'scaleX(-1)' },
+        ];
+
+        function hideCat() {
+            if (!isCatVisible) return;
+            isCatVisible = false;
+
+            const isFlipped = cat.style.transform.includes('scaleX(-1)');
+            if (isFlipped) {
+                cat.style.transform = 'scaleX(-1) translateX(-150%)';
+            } else {
+                cat.style.transform = 'scaleX(1) translateX(150%)';
+            }
+            
+            cat.style.opacity = '0';
+            catTimeout = setTimeout(showCat, 2000 + Math.random() * 2000);
+        }
+
+        function showCat() {
+            const randomCorner = cornerPositions[Math.floor(Math.random() * cornerPositions.length)];
+            
+            cat.style.left = randomCorner.left || 'auto';
+            cat.style.right = randomCorner.right || 'auto';
+            cat.style.bottom = randomCorner.bottom;
+            
+            const isFlipped = randomCorner.transform.includes('scaleX(-1)');
+            if (isFlipped) {
+                cat.style.transform = 'scaleX(-1) translateX(-150%)';
+            } else {
+                cat.style.transform = 'scaleX(1) translateX(150%)';
+            }
+
+            setTimeout(() => {
+                cat.style.transform = randomCorner.transform;
+                cat.style.opacity = '1';
+                isCatVisible = true;
+            }, 100);
+        }
+
+        cat.addEventListener('mouseenter', hideCat);
+        cat.addEventListener('touchstart', hideCat);
+
+        setTimeout(showCat, 2000);
+        // --- Confetti Effect ---
+        const confettiContainer = document.getElementById('confetti-container');
+        const confettiColors = ['gold', 'pink', 'silver'];
+        function createConfettiPiece() {
+            const confettiEl = document.createElement('div');
+            confettiEl.classList.add('confetti', confettiColors[Math.floor(Math.random() * confettiColors.length)]);
+            confettiEl.style.left = Math.random() * 100 + 'vw';
+            confettiEl.style.animationDelay = Math.random() * 4 + 's';
+            confettiEl.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            confettiContainer.appendChild(confettiEl);
+            setTimeout(() => confettiEl.remove(), 7000);
+        }
+        function celebrate() {
+            for (let i = 0; i < 150; i++) createConfettiPiece(); // More confetti for the wish!
+        }
+        setTimeout(() => { for (let i = 0; i < 70; i++) createConfettiPiece() }, 500);
+
+
+
+        // --- Make a Wish Modal Logic ---
+        const wishModal = document.getElementById('wish-modal');
+        const showWishModalBtn = document.getElementById('show-wish-modal-btn');
+        const closeWishModalBtn = document.getElementById('close-wish-modal-btn');
+        const submitWishBtn = document.getElementById('submit-wish-btn');
+        const wishInput = document.getElementById('wish-input');
+        const wishPrompt = document.getElementById('wish-prompt');
+        const wishConfirmation = document.getElementById('wish-confirmation');
+
+        showWishModalBtn.addEventListener('click', () => wishModal.classList.replace('modal-hidden', 'modal-visible'));
+        closeWishModalBtn.addEventListener('click', () => wishModal.classList.replace('modal-visible', 'modal-hidden'));
+        submitWishBtn.addEventListener('click', () => {
+            if (wishInput.value.trim() === "") {
+                // Using a custom styled modal for alerts is better, but for simplicity:
+                alert("Don't forget to write your wish!");
+                return;
+            }
+            wishModal.classList.replace('modal-visible', 'modal-hidden');
+            wishPrompt.style.display = 'none';
+            wishConfirmation.style.display = 'block';
+            celebrate();
+        });
+
+        // --- Poem Display Modal Logic ---
+        const poemDisplayModal = document.getElementById('poem-display-modal');
+        const showPoemBtn = document.getElementById('show-poem-btn');
+        const closePoemModalBtn = document.getElementById('close-poem-modal-btn');
+
+        showPoemBtn.addEventListener('click', () => poemDisplayModal.classList.replace('modal-hidden', 'modal-visible'));
+        closePoemModalBtn.addEventListener('click', () => poemDisplayModal.classList.replace('modal-visible', 'modal-hidden'));
+
+        // --- Special Note Modal Logic ---
+        const specialNoteModal = document.getElementById('special-note-modal');
+        const showSpecialNoteBtn = document.getElementById('show-special-note-btn');
+        const closeSpecialNoteModalBtn = document.getElementById('close-special-note-modal-btn');
+
+        showSpecialNoteBtn.addEventListener('click', () => specialNoteModal.classList.replace('modal-hidden', 'modal-visible'));
+        closeSpecialNoteModalBtn.addEventListener('click', () => specialNoteModal.classList.replace('modal-visible', 'modal-hidden'));
+
+        // Close modal if clicking on the background
+        [wishModal, poemDisplayModal, specialNoteModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.replace('modal-visible', 'modal-hidden');
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>
